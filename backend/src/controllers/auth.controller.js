@@ -15,7 +15,7 @@ export const register = async (req, res) => {
 
     const existingUsername = await db.query(
       "SELECT * FROM users WHERE username = $1",
-      [name]
+      [username]
     );
     if (existingUsername.rows.length)
       return res.status(400).json({ message: "Username already exists" });

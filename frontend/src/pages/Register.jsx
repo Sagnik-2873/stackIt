@@ -16,13 +16,15 @@ export default function Register() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "http://localhost:5030/api/auth/register",
         form
       );
+
       login(res.data.token, res.data.user);
       navigate("/");
     } catch (err) {
       alert(err.response?.data?.error || "Registration failed");
+      console.log(err);
     }
   };
 
@@ -82,10 +84,7 @@ export default function Register() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="btn btn-primary w-full mb-4"
-        >
+        <button type="submit" className="btn btn-primary w-full mb-4">
           Register
         </button>
       </form>

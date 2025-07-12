@@ -10,19 +10,19 @@ export const AuthProvider = ({ children }) => {
     setToken(token);
     setUser(user);
     localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("stackit-user", JSON.stringify(user));
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    localStorage.removeItem("stackit-user");
   };
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("stackit-user");
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
