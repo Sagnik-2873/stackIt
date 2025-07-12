@@ -5,7 +5,7 @@ export default function Navbar() {
   const { user, logout } = useUser();
 
   return (
-    <div className="navbar bg-base-100 shadow px-4">
+    <div  className="bg-base-100 shadow-md h-16 flex items-center px-4">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost text-xl text-primary font-bold">
           StackIt

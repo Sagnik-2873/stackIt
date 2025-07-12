@@ -9,9 +9,9 @@ import Register from "./pages/Register";
 function App() {
   return (
     <BrowserRouter>
-      <div data-theme="abyss">
+      <div data-theme="abyss" className="min-h-screen bg-base-200 flex flex-col">
         <Navbar />
-        <div className="max-w-4xl mx-auto p-4">
+        <div className="flex-grow px-4 py-6">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/ask" element={<AskQuestion />} />
