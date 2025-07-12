@@ -7,7 +7,6 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["retro"], 
-    darkTheme: "retro",
+    themes: ["retro", "abyss"],
   },
 };

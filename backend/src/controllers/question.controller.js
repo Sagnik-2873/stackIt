@@ -62,7 +62,6 @@ export const createQuestion = async (req, res) => {
   res.status(201).json(question.rows[0]);
 };
 
-// controllers/question.controller.js
 export const searchQuestions = async (req, res) => {
   const { query, tag, userId, page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
