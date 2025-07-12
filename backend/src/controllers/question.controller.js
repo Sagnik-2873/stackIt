@@ -61,3 +61,47 @@ export const createQuestion = async (req, res) => {
 
   res.status(201).json(question.rows[0]);
 };
+
+// controllers/question.controller.js
+export const searchQuestions = async (req, res) => {
+  const { query, tag, userId, page = 1, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
+
+  let sql = `
+    SELECT q.*, u.username FROM questions q
+    JOIN users u ON u.id = q.author_id
+    WHERE 1=1
+  `;
+  const params = [];
+
+  if (query) {
+    sql += ` AND (q.title ILIKE $${params.length + 1} OR q.description ILIKE $${
+      params.length + 1
+    })`;
+    params.push(`%${query}%`);
+  }
+
+  if (tag) {
+    sql += `
+      AND q.id IN (
+        SELECT question_id FROM question_tags qt
+        JOIN tags t ON qt.tag_id = t.id
+        WHERE t.name = $${params.length + 1}
+      )
+    `;
+    params.push(tag);
+  }
+
+  if (userId) {
+    sql += ` AND q.author_id = $${params.length + 1}`;
+    params.push(userId);
+  }
+
+  sql += ` ORDER BY q.created_at DESC LIMIT $${params.length + 1} OFFSET $${
+    params.length + 2
+  }`;
+  params.push(limit, offset);
+
+  const result = await db.query(sql, params);
+  res.json(result.rows);
+};
