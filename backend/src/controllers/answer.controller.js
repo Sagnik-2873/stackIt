@@ -3,17 +3,19 @@ import { db } from "../config/db.js";
 export const addAnswer = async (req, res) => {
   const { content } = req.body;
   const { questionId } = req.params;
+  const userId = req.user.id;
 
-  const answer = await db.query(
-    "INSERT INTO answers (content, question_id, author_id) VALUES ($1, $2, $3) RETURNING *",
-    [content, questionId, req.user.id]
-  );
+  try {
+    const result = await db.query(
+      "INSERT INTO answers (content, question_id, author_id) VALUES ($1, $2, $3) RETURNING *",
+      [content, questionId, userId]
+    );
 
-  await db.query(
-    "INSERT INTO notifications (recipient_id, message) VALUES ($1, $2)",
-    [questionOwnerId, `Your question "${questionTitle}" got a new answer.`]
-  );
-  res.status(201).json(answer.rows[0]);
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Post answer error:", err.message);
+    res.status(500).json({ error: "Could not post answer." });
+  }
 };
 
 export const markAccepted = async (req, res) => {

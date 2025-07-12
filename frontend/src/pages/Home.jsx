@@ -2,27 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-// const mockQuestions = [
-//   {
-//     id: 1,
-//     title: "How do I use useEffect with dependencies?",
-//     tags: ["React", "Hooks"],
-//     description:
-//       "I'm trying to understand how dependencies in useEffect work in React...",
-//     votes: 5,
-//     answers: 2,
-//   },
-//   {
-//     id: 2,
-//     title: "Best way to secure JWT tokens in frontend?",
-//     tags: ["JWT", "Security"],
-//     description:
-//       "Should I store JWT in localStorage or cookies? What's safest?",
-//     votes: 3,
-//     answers: 4,
-//   },
-// ];
-
 export default function Home() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +46,7 @@ export default function Home() {
               </Link>
 
               <div className="text-sm text-gray-500">
-                {/* ⬆️ {q.votes} | 💬 {q.answers} */}
+                ⬆️ {q.upvotes} | 💬 {q.answer_count}
               </div>
             </div>
 

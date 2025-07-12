@@ -37,21 +37,45 @@ export const getAllQuestions = async (req, res) => {
 export const getQuestionById = async (req, res) => {
   const { id } = req.params;
 
-  const question = await db.query("SELECT * FROM questions WHERE id = $1", [
-    id,
-  ]);
-  const answers = await db.query(
-    `
-    SELECT a.*, u.username 
-    FROM answers a
-    JOIN users u ON a.author_id = u.id
-    WHERE question_id = $1
-    ORDER BY created_at ASC
-  `,
-    [id]
-  );
+  try {
+    const question = await db.query(
+      `
+      SELECT q.*, u.username,
+        ARRAY(
+          SELECT t.name
+          FROM tags t
+          JOIN question_tags qt ON qt.tag_id = t.id
+          WHERE qt.question_id = q.id
+        ) AS tags
+      FROM questions q
+      JOIN users u ON u.id = q.author_id
+      WHERE q.id = $1
+    `,
+      [id]
+    );
 
-  res.json({ question: question.rows[0], answers: answers.rows });
+    const answers = await db.query(
+      `
+      SELECT a.*, u.username AS author, 
+        COALESCE(SUM(CASE WHEN v.vote_type = 1 THEN 1 WHEN v.vote_type = -1 THEN -1 ELSE 0 END), 0) AS votes
+      FROM answers a
+      JOIN users u ON u.id = a.author_id
+      LEFT JOIN votes v ON v.answer_id = a.id
+      WHERE a.question_id = $1
+      GROUP BY a.id, u.username
+      ORDER BY a.is_accepted DESC, a.created_at ASC
+    `,
+      [id]
+    );
+
+    res.json({
+      question: question.rows[0],
+      answers: answers.rows,
+    });
+  } catch (err) {
+    console.error("getQuestionById error:", err.message);
+    res.status(500).json({ error: "Could not load question." });
+  }
 };
 
 export const createQuestion = async (req, res) => {
