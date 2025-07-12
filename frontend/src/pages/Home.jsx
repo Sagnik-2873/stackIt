@@ -1,34 +1,58 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
-const mockQuestions = [
-  {
-    id: 1,
-    title: "How do I use useEffect with dependencies?",
-    tags: ["React", "Hooks"],
-    description:
-      "I'm trying to understand how dependencies in useEffect work in React...",
-    votes: 5,
-    answers: 2,
-  },
-  {
-    id: 2,
-    title: "Best way to secure JWT tokens in frontend?",
-    tags: ["JWT", "Security"],
-    description:
-      "Should I store JWT in localStorage or cookies? What's safest?",
-    votes: 3,
-    answers: 4,
-  },
-];
+// const mockQuestions = [
+//   {
+//     id: 1,
+//     title: "How do I use useEffect with dependencies?",
+//     tags: ["React", "Hooks"],
+//     description:
+//       "I'm trying to understand how dependencies in useEffect work in React...",
+//     votes: 5,
+//     answers: 2,
+//   },
+//   {
+//     id: 2,
+//     title: "Best way to secure JWT tokens in frontend?",
+//     tags: ["JWT", "Security"],
+//     description:
+//       "Should I store JWT in localStorage or cookies? What's safest?",
+//     votes: 3,
+//     answers: 4,
+//   },
+// ];
 
 export default function Home() {
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await axios.get("http://localhost:5030/api/questions");
+        setQuestions(res.data);
+        console.log(res.data);
+      } catch (err) {
+        console.error("Error fetching questions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, []);
+
+  if (loading) return <p className="text-center py-8">Loading questions...</p>;
+
+  console.log(questions);
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
       <h1 className="text-3xl font-bold text-center mb-6">
         📋 Recent Questions
       </h1>
 
-      {mockQuestions.map((q) => (
+      {questions.map((q) => (
         <div
           key={q.id}
           className="card bg-base-100 shadow-md hover:shadow-lg transition duration-300 border border-base-300"
@@ -43,7 +67,7 @@ export default function Home() {
               </Link>
 
               <div className="text-sm text-gray-500">
-                ⬆️ {q.votes} | 💬 {q.answers}
+                {/* ⬆️ {q.votes} | 💬 {q.answers} */}
               </div>
             </div>
 
@@ -52,9 +76,9 @@ export default function Home() {
             </p>
 
             <div className="flex gap-2 flex-wrap pt-2">
-              {q.tags.map((tag) => (
+              {q.tags.map((tag, index) => (
                 <div
-                  key={tag}
+                  key={index}
                   className="badge badge-outline badge-sm font-mono"
                 >
                   {tag}

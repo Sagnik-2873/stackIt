@@ -9,7 +9,8 @@ export default function AskQuestion() {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [description, setDescription] = useState("");
-  const { token } = useAuth();
+  const { user, token } = useAuth();
+  const [userID, setUserID] = useState("");
   const navigate = useNavigate();
 
   const availableTags = ["React", "JWT", "Tailwind", "Node.js"];
@@ -21,6 +22,7 @@ export default function AskQuestion() {
   };
 
   const handleSubmit = async (e) => {
+    setUserID(user.username);
     e.preventDefault();
 
     if (!token) {

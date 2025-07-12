@@ -2,12 +2,36 @@ import { db } from "../config/db.js";
 
 export const getAllQuestions = async (req, res) => {
   const result = await db.query(`
-    SELECT q.*, u.username 
-    FROM questions q 
-    JOIN users u ON q.author_id = u.id
-    ORDER BY q.created_at DESC
+    SELECT
+        q.*,
+        u.username,
+        (SELECT COUNT(*) FROM answers a WHERE a.question_id = q.id) AS answer_count,
+
+        COALESCE((
+          SELECT COUNT(*) FROM votes v
+          JOIN answers a ON a.id = v.answer_id
+          WHERE a.question_id = q.id AND v.vote_type = 1
+        ), 0) AS upvotes,
+
+        COALESCE((
+          SELECT COUNT(*) FROM votes v
+          JOIN answers a ON a.id = v.answer_id
+          WHERE a.question_id = q.id AND v.vote_type = -1
+        ), 0) AS downvotes,
+
+        ARRAY(
+          SELECT t.name
+          FROM tags t
+          JOIN question_tags qt ON qt.tag_id = t.id
+          WHERE qt.question_id = q.id
+        ) AS tags
+
+      FROM questions q
+      JOIN users u ON u.id = q.author_id
+      ORDER BY q.created_at DESC
   `);
   res.json(result.rows);
+  console.log(result.rows);
 };
 
 export const getQuestionById = async (req, res) => {
@@ -32,9 +56,12 @@ export const getQuestionById = async (req, res) => {
 
 export const createQuestion = async (req, res) => {
   const { title, description, tags } = req.body;
+  const userId = req.user.id;
+
+  console.log(userId);
   const question = await db.query(
     "INSERT INTO questions (title, description, author_id) VALUES ($1, $2, $3) RETURNING *",
-    [title, description, req.user.id]
+    [title, description, userId]
   );
 
   const qid = question.rows[0].id;
