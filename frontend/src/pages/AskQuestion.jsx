@@ -64,7 +64,7 @@ export default function AskQuestion() {
         value={description}
         onChange={setDescription}
         placeholder="Write your question here..."
-        className="bg-white"
+        className="quill-editor"
       />
 
       <button className="btn btn-primary" onClick={handleSubmit}>
