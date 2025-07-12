@@ -21,6 +21,7 @@ export default function Navbar() {
             <div className="hidden sm:block text-sm">
               👤 {user.email}
             </div>
+            <Link to="/profile" className="btn btn-sm btn-ghost">Profile</Link>
             <button
               onClick={logout}
               className="btn btn-sm btn-error"
