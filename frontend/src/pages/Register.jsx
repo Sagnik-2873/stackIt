@@ -1,11 +1,11 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,19 +27,14 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white w-full max-w-sm p-8 rounded-lg shadow-md"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-          Register
-        </h2>
+    <div className="max-w-md mx-auto mt-16 p-6 bg-base-100 shadow-md rounded">
+      <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
 
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="username"
-            className="block mb-1 text-gray-600 text-sm"
+            className="block mb-1 text-sm text-gray-600"
           >
             Username
           </label>
@@ -49,13 +44,13 @@ const Register = () => {
             value={form.username}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="input input-bordered w-full"
             placeholder="Enter username"
           />
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block mb-1 text-gray-600 text-sm">
+          <label htmlFor="email" className="block mb-1 text-sm text-gray-600">
             Email
           </label>
           <input
@@ -64,7 +59,7 @@ const Register = () => {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="input input-bordered w-full"
             placeholder="Enter email"
           />
         </div>
@@ -72,7 +67,7 @@ const Register = () => {
         <div className="mb-6">
           <label
             htmlFor="password"
-            className="block mb-1 text-gray-600 text-sm"
+            className="block mb-1 text-sm text-gray-600"
           >
             Password
           </label>
@@ -82,20 +77,25 @@ const Register = () => {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="input input-bordered w-full"
             placeholder="Enter password"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
+          className="btn btn-primary w-full mb-4"
         >
           Register
         </button>
       </form>
+
+      <p className="text-sm text-center">
+        Already have an account?{" "}
+        <a href="/login" className="text-primary hover:underline">
+          Login
+        </a>
+      </p>
     </div>
   );
-};
-
-export default Register;
+}
