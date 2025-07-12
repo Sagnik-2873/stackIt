@@ -1,11 +1,16 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function AskQuestion() {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [description, setDescription] = useState("");
+  const { token } = useAuth();
+  const navigate = useNavigate();
 
   const availableTags = ["React", "JWT", "Tailwind", "Node.js"];
 
@@ -15,9 +20,36 @@ export default function AskQuestion() {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!token) {
+      alert("Please login to ask a question.");
+      return;
+    }
+
     console.log({ title, tags, description });
-    alert("Question submitted (mock)");
+    try {
+      const res = await axios.post(
+        "http://localhost:5030/api/questions",
+        {
+          title,
+          tags,
+          description,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      navigate("/");
+    } catch (err) {
+      alert(err.response?.data?.error || "Registration failed");
+      console.log(err);
+    }
   };
 
   return (

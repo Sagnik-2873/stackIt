@@ -5,6 +5,7 @@ import QuestionDetail from "./pages/QuestionDetail";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/question/:id" element={<QuestionDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </div>
       </div>

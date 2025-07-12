@@ -23,6 +23,9 @@ export default function Navbar() {
         {user ? (
           <>
             <div className="hidden sm:block text-sm">👤 {user.username}</div>
+            <Link to="/profile" className="btn btn-sm btn-ghost">
+              Profile
+            </Link>
             <button onClick={logout} className="btn btn-sm btn-error">
               Logout
             </button>
