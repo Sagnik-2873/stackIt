@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -27,17 +27,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="max-w-md mx-auto mt-16 p-6 bg-base-100 shadow-md rounded">
       <form
         onSubmit={handleSubmit}
-        className="bg-white w-full max-w-sm p-8 rounded-lg shadow-md"
+        className="bg-base-100 w-full max-w-sm p-8 rounded-lg shadow-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
+        <h2 className="text-2xl font-bold mb-6 text-center text-base-content">
           Login
         </h2>
 
+        {/* Email Field */}
         <div className="mb-4">
-          <label htmlFor="email" className="block mb-1 text-gray-600 text-sm">
+          <label htmlFor="email" className="block mb-1 text-sm text-base-content">
             Email
           </label>
           <input
@@ -46,16 +47,14 @@ export default function Login() {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="input input-bordered w-full"
             placeholder="Enter email"
           />
         </div>
 
+        {/* Password Field */}
         <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block mb-1 text-gray-600 text-sm"
-          >
+          <label htmlFor="password" className="block mb-1 text-sm text-base-content">
             Password
           </label>
           <input
@@ -64,17 +63,26 @@ export default function Login() {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="input input-bordered w-full"
             placeholder="Enter password"
           />
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
+          className="btn btn-primary w-full"
         >
           Login
         </button>
+
+        {/* Link to Register */}
+        <p className="text-sm mt-4 text-center">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-primary hover:underline">
+            Register
+          </Link>
+        </p>
       </form>
     </div>
   );
