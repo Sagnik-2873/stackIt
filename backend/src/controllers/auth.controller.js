@@ -24,6 +24,7 @@ export const register = async (req, res) => {
       "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
       [username, email, hashedPassword]
     );
+
     const token = generateToken(result.rows[0].id);
     res.status(201).json({ user: result.rows[0], token });
   } catch (err) {
